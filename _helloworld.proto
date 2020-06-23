@@ -1,0 +1,70 @@
+//#service-request-reply
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.example.helloworld";
+option java_outer_classname = "HelloWorldProto";
+
+// The greeting service definition.
+service GreeterService {
+    // Sends a greeting
+    rpc SayHello (HelloRequest) returns (HelloReply) {}
+
+    //#service-request-reply
+    //#service-stream
+    // The stream of incoming HelloRequest messages are
+    // sent out as corresponding HelloReply. From
+    // all clients to all clients, like a chat room.
+    rpc SayHelloToAll (stream HelloRequest) returns (stream HelloReply) {}
+    //#service-stream
+    //#service-request-reply
+
+ //sends the ingestion data
+
+    rpc IngestData(stream SensorData) returns (ServerReply){}
+
+    //sends log message to the akka streams
+
+    rpc LogMessages(stream LogData) returns (ServerReply){}
+
+
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+    string name = 1;
+}
+
+// The response message containing the greetings
+message HelloReply {
+    string message = 1;
+}
+//#service-request-reply
+
+//for ingestion methods
+message SensorData {
+    int32 Seq = 1;
+    string PatchId =2;
+    repeated int32 ECG0=3;
+    repeated int32 ECG1=4;
+    repeated int32 Accel=5;
+    repeated int32 Respiration=6;
+    int32 vBat=7;
+    int32 IAGain=8;
+    int32 LeadStatus=9;
+    int32 RLDInformation=10;
+    int32 Temperature=11;
+    int32 TsECG=12;
+
+}
+
+
+
+message LogData {
+    string logmsg = 1;
+}
+
+message ServerReply {
+  string servermsg =1;
+
+}
